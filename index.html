@@ -1,13 +1,13 @@
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>Amor en la uno 💖</title>
 
 <style>
+
 *{
 margin:0;
 padding:0;
@@ -20,26 +20,34 @@ background:linear-gradient(to bottom,#ffd6f7,#ead7ff,#d6f0ff);
 min-height:100vh;
 overflow-x:hidden;
 color:#333;
+padding-top:170px;
 }
 
+/* HEADER */
+
 header{
-position:sticky;
+position:fixed;
 top:0;
+left:0;
+width:100%;
 z-index:999;
 backdrop-filter:blur(15px);
-background:rgba(255,255,255,.5);
-padding:20px;
+background:rgba(255,255,255,.65);
+padding:12px 20px;
 border-bottom:2px solid rgba(255,255,255,.5);
+box-shadow:0 5px 20px rgba(0,0,0,.08);
 }
 
 h1{
-font-size:3rem;
+font-size:2.5rem;
 font-weight:900;
 background:linear-gradient(to right,#ff4fae,#9f5cff,#5caeff);
 -webkit-background-clip:text;
 -webkit-text-fill-color:transparent;
-margin-bottom:20px;
+margin-bottom:15px;
 }
+
+/* BOTONES */
 
 .chapterBar,
 .pageButtons,
@@ -47,7 +55,7 @@ margin-bottom:20px;
 display:flex;
 gap:10px;
 flex-wrap:wrap;
-margin-bottom:15px;
+margin-bottom:10px;
 }
 
 button,
@@ -68,19 +76,27 @@ button:hover,
 transform:scale(1.05);
 }
 
+/* VISOR */
+
 .viewer{
-display:grid;
-grid-template-columns:repeat(auto-fit,minmax(350px,1fr));
-gap:20px;
+display:flex;
+flex-direction:column;
+align-items:center;
+gap:30px;
 padding:30px;
 }
 
 .viewer img{
 width:100%;
+max-width:900px;
 border-radius:30px;
 box-shadow:0 15px 30px rgba(0,0,0,.2);
 transition:.3s;
+display:block;
+margin:auto;
 }
+
+/* NAVEGACION */
 
 .navigation{
 display:flex;
@@ -88,6 +104,8 @@ justify-content:center;
 gap:20px;
 padding:30px;
 }
+
+/* PANEL ADMIN */
 
 .admin{
 position:fixed;
@@ -131,6 +149,8 @@ min-height:100px;
 resize:vertical;
 }
 
+/* CAJAS */
+
 .noteBox{
 background:white;
 padding:20px;
@@ -154,6 +174,30 @@ margin-top:10px;
 background:#ff4f8f !important;
 }
 
+/* FLORES */
+
+.floating{
+position:fixed;
+pointer-events:none;
+font-size:24px;
+animation:float 10s linear infinite;
+opacity:.7;
+}
+
+@keyframes float{
+0%{
+transform:translateY(-100px) rotate(0deg);
+opacity:0;
+}
+10%{
+opacity:1;
+}
+100%{
+transform:translateY(120vh) rotate(360deg);
+opacity:0;
+}
+}
+
 </style>
 </head>
 <body>
@@ -169,6 +213,8 @@ background:#ff4f8f !important;
 <div class="pageButtons" id="pageButtons"></div>
 
 </header>
+
+<!-- PANEL ADMIN -->
 
 <div class="admin">
 
@@ -250,6 +296,8 @@ Subir documento
 
 </div>
 
+<!-- INFO -->
+
 <div class="noteBox">
 <h2 id="titleView"></h2>
 <p id="noteView"></p>
@@ -258,7 +306,11 @@ Subir documento
 <div id="downloadContainer"></div>
 </div>
 
+<!-- VISOR -->
+
 <div class="viewer" id="viewer"></div>
+
+<!-- NAVEGACION -->
 
 <div class="navigation">
 <button onclick="previousPage()">⬅ Atrás</button>
@@ -283,6 +335,8 @@ function save(){
 localStorage.setItem("manga",JSON.stringify(manga));
 }
 
+/* LOGIN */
+
 function login(){
 
 const user=document.getElementById("user").value;
@@ -300,6 +354,8 @@ alert("❌ Datos incorrectos");
 
 }
 
+/* CAPITULOS */
+
 function createChapters(){
 
 const chapterBar=document.getElementById("chapterBar");
@@ -313,6 +369,7 @@ btn.innerText=ch;
 btn.onclick=()=>{
 
 currentChapter=ch;
+
 renderPages();
 
 };
@@ -331,6 +388,8 @@ document.getElementById("moveChapter").appendChild(option);
 });
 
 }
+
+/* SUBIR IMAGENES */
 
 function uploadImages(event){
 
@@ -364,6 +423,8 @@ reader.readAsDataURL(file);
 
 }
 
+/* RENDER */
+
 function renderPages(){
 
 const viewer=document.getElementById("viewer");
@@ -386,7 +447,7 @@ image.src=img;
 
 image.style.filter=`brightness(${brightness}%)`;
 
-image.style.width=`${size}%`;
+image.style.maxWidth=`${size}%`;
 
 viewer.appendChild(image);
 
@@ -399,6 +460,8 @@ renderImageSelector();
 renderDocument();
 
 }
+
+/* PAGINAS */
 
 function renderPageButtons(){
 
@@ -419,6 +482,8 @@ container.appendChild(btn);
 });
 
 }
+
+/* SELECTOR */
 
 function renderImageSelector(){
 
@@ -452,6 +517,8 @@ selector.appendChild(btn);
 
 }
 
+/* BORRAR */
+
 function deleteImage(){
 
 if(selectedImage===null)return;
@@ -463,6 +530,8 @@ save();
 renderPages();
 
 }
+
+/* MOVER */
 
 function moveImage(){
 
@@ -488,6 +557,8 @@ renderPages();
 
 }
 
+/* REEMPLAZAR */
+
 function replaceImage(event){
 
 if(selectedImage===null)return;
@@ -509,6 +580,8 @@ renderPages();
 reader.readAsDataURL(file);
 
 }
+
+/* DOCUMENTOS */
 
 function uploadDocument(event){
 
@@ -542,7 +615,6 @@ const container=document.getElementById("downloadContainer");
 if(!documentFile){
 
 container.innerHTML="";
-
 return;
 
 }
@@ -565,6 +637,8 @@ renderDocument();
 
 }
 
+/* TEXTOS */
+
 function updateTexts(){
 
 document.getElementById("titleView").innerText=document.getElementById("titleInput").value;
@@ -574,6 +648,8 @@ document.getElementById("noteView").innerText=document.getElementById("noteInput
 document.getElementById("dedicationView").innerText=document.getElementById("dedicationInput").value;
 
 }
+
+/* NAVEGACION */
 
 function nextPage(){
 
@@ -592,6 +668,34 @@ behavior:"smooth"
 });
 
 }
+
+/* EFECTOS */
+
+function createFloating(){
+
+const emojis=["🌸","💖","✨","🫧"];
+
+const el=document.createElement("div");
+
+el.className="floating";
+
+el.innerText=emojis[Math.floor(Math.random()*emojis.length)];
+
+el.style.left=Math.random()*100+"vw";
+
+el.style.animationDuration=(5+Math.random()*10)+"s";
+
+document.body.appendChild(el);
+
+setTimeout(()=>{
+el.remove();
+},15000);
+
+}
+
+setInterval(createFloating,700);
+
+/* START */
 
 createChapters();
 
