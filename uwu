@@ -1,300 +1,603 @@
-import { useEffect, useMemo, useState } from "react";
 
-export default function AmorEnLaUno() {
-  const [currentChapter, setCurrentChapter] = useState(1);
-  const [currentPage, setCurrentPage] = useState(0);
-  const [doublePage, setDoublePage] = useState(true);
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [isLogged, setIsLogged] = useState(false);
+<title>Amor en la uno 💖</title>
 
-  const [uploadedPages, setUploadedPages] = useState(() => {
-    const saved = localStorage.getItem("amor-en-la-uno-pages");
-    return saved ? JSON.parse(saved) : {};
-  });
-
-  const [uploadedDocument, setUploadedDocument] = useState(() => {
-    const saved = localStorage.getItem("amor-en-la-uno-document");
-    return saved ? JSON.parse(saved) : null;
-  });
-
-  const [selectedImageIndex, setSelectedImageIndex] = useState(null);
-
-  const [moveToChapter, setMoveToChapter] = useState(1);
-  const [moveToPage, setMoveToPage] = useState(1);
-
-  const [imageSize, setImageSize] = useState(100);
-  const [imageBrightness, setImageBrightness] = useState(100);
-
-  const [chapterTitle, setChapterTitle] = useState("");
-  const [chapterNote, setChapterNote] = useState("");
-  const [dedication, setDedication] = useState("");
-
-  const chapters = [1, 2, 3, 4, 5, 6];
-
-  const mangaData = useMemo(
-    () => ({
-      1: [],
-      2: [],
-      3: [],
-      4: [],
-      5: [],
-      6: [],
-    }),
-    []
-  );
-
-  const pages =
-    uploadedPages[currentChapter] || mangaData[currentChapter] || [];
-
-  const totalPages = pages.length;
-
-  useEffect(() => {
-    const savedLogin = localStorage.getItem("amor-en-la-uno-admin");
-
-    if (savedLogin === "true") {
-      setIsLogged(true);
-    }
-  }, []);
-
-  const ADMIN_EMAIL = "adminuwu";
-  const ADMIN_PASSWORD = "admin123uwu";
-
-  const handleLogin = (e) => {
-    e.preventDefault();
-
-    if (
-      email === ADMIN_EMAIL &&
-      password === ADMIN_PASSWORD
-    ) {
-      setIsLogged(true);
-      localStorage.setItem("amor-en-la-uno-admin", "true");
-    } else {
-      alert("❌ Usuario o contraseña incorrectos");
-    }
-  };
-
-  const uploadChapter = async (e) => {
-    const files = Array.from(e.target.files);
-
-    if (!files.length) return;
-
-    const imagePromises = files.map(
-      (file) =>
-        new Promise((resolve) => {
-          const reader = new FileReader();
-
-          reader.onload = (event) => {
-            resolve(event.target.result);
-          };
-
-          reader.readAsDataURL(file);
-        })
-    );
-
-    const imageUrls = await Promise.all(imagePromises);
-
-    setUploadedPages((prev) => {
-      const updated = { ...prev };
-
-      const targetChapter = moveToChapter;
-      const existingPages = [...(updated[targetChapter] || [])];
-
-      imageUrls.forEach((image, idx) => {
-        const insertIndex = Math.max(0, moveToPage - 1 + idx);
-
-        existingPages.splice(insertIndex, 0, image);
-      });
-
-      updated[targetChapter] = existingPages;
-
-      localStorage.setItem(
-        "amor-en-la-uno-pages",
-        JSON.stringify(updated)
-      );
-
-      return updated;
-    });
-
-    setCurrentChapter(moveToChapter);
-    setCurrentPage(Math.max(0, moveToPage - 1));
-
-    e.target.value = "";
-
-    alert(`✨ ${files.length} imágenes agregadas correctamente`);
-  };
-
-  const nextPage = () => {
-    const step = doublePage ? 2 : 1;
-
-    if (currentPage + step < pages.length) {
-      setCurrentPage(currentPage + step);
-    }
-  };
-
-  const previousPage = () => {
-    const step = doublePage ? 2 : 1;
-
-    if (currentPage - step >= 0) {
-      setCurrentPage(currentPage - step);
-    }
-  };
-
-  const visiblePages = doublePage
-    ? pages.slice(currentPage, currentPage + 2)
-    : pages.slice(currentPage, currentPage + 1);
-
-  return (
-    <div className="min-h-screen bg-gradient-to-b from-pink-100 via-purple-100 to-blue-100 overflow-hidden relative text-gray-800">
-      <div className="fixed right-4 top-4 z-[999]">
-        {!isLogged ? (
-          <form
-            onSubmit={handleLogin}
-            className="bg-white/80 backdrop-blur-xl rounded-3xl shadow-2xl border border-white/60 p-5 flex flex-col gap-3 w-[280px]"
-          >
-            <h2 className="font-black text-xl text-pink-500">
-              Login Admin ✨
-            </h2>
-
-            <input
-              type="text"
-              placeholder="Usuario"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              className="px-4 py-3 rounded-2xl outline-none border border-pink-200"
-            />
-
-            <input
-              type="password"
-              placeholder="Contraseña"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              className="px-4 py-3 rounded-2xl outline-none border border-pink-200"
-            />
-
-            <button className="bg-gradient-to-r from-pink-400 to-purple-400 text-white py-3 rounded-2xl font-bold">
-              Iniciar sesión 💖
-            </button>
-          </form>
-        ) : (
-          <div className="bg-white/80 backdrop-blur-xl rounded-3xl shadow-2xl border border-white/60 p-5 flex flex-col gap-3 w-[320px] max-h-[90vh] overflow-y-auto">
-
-            <h2 className="font-black text-xl text-purple-500">
-              Panel Admin 🌸
-            </h2>
-
-            {/* Acá sigue TODO el panel admin */}
-          </div>
-        )}
-      </div>
-
-      <header className="sticky top-0 z-50 backdrop-blur-xl bg-white/50 border-b border-pink-200 shadow-sm">
-        <div className="max-w-7xl mx-auto px-4 py-4 flex flex-col gap-4">
-
-          <h1 className="text-5xl font-black bg-gradient-to-r from-pink-500 via-purple-500 to-blue-500 bg-clip-text text-transparent">
-            Amor en la uno 💖
-          </h1>
-
-          <div className="flex gap-2 flex-wrap">
-            {chapters.map((chapter) => (
-              <button
-                key={chapter}
-                onClick={() => {
-                  setCurrentChapter(chapter);
-                  setCurrentPage(0);
-                }}
-                className="w-12 h-12 rounded-full bg-white shadow-lg"
-              >
-                {chapter}
-              </button>
-            ))}
-          </div>
-
-          <div className="flex gap-2 flex-wrap">
-            {pages.map((_, index) => (
-              <button
-                key={index}
-                onClick={() => setCurrentPage(index)}
-                className="w-10 h-10 rounded-full bg-pink-200"
-              >
-                {index + 1}
-              </button>
-            ))}
-          </div>
-
-        </div>
-      </header>
-
-      <main className="max-w-7xl mx-auto px-4 py-10">
-
-        {chapterTitle && (
-          <h2 className="text-4xl font-black text-pink-500 mb-4">
-            {chapterTitle}
-          </h2>
-        )}
-
-        {chapterNote && (
-          <div className="bg-white rounded-3xl p-5 mb-4 shadow-xl">
-            {chapterNote}
-          </div>
-        )}
-
-        {dedication && (
-          <div className="bg-pink-50 rounded-3xl p-5 mb-4 shadow-xl">
-            🎀 {dedication}
-          </div>
-        )}
-
-        {uploadedDocument && (
-          <a
-            href={uploadedDocument.url}
-            download={uploadedDocument.name}
-            className="inline-block bg-blue-400 text-white px-5 py-3 rounded-2xl mb-5"
-          >
-            ⬇ Descargar documento
-          </a>
-        )}
-
-        <div
-          className={`grid gap-6 ${
-            doublePage
-              ? "grid-cols-1 md:grid-cols-2"
-              : "grid-cols-1"
-          }`}
-        >
-          {visiblePages.map((page, index) => (
-            <img
-              key={index}
-              src={page}
-              alt=""
-              className="rounded-3xl shadow-2xl"
-              style={{
-                width: `${imageSize}%`,
-                margin: "0 auto",
-                filter: `brightness(${imageBrightness}%)`,
-              }}
-            />
-          ))}
-        </div>
-
-        <div className="flex justify-center gap-4 mt-8">
-          <button
-            onClick={previousPage}
-            className="px-5 py-3 rounded-2xl bg-pink-400 text-white font-bold"
-          >
-            ⬅ Atrás
-          </button>
-
-          <button
-            onClick={nextPage}
-            className="px-5 py-3 rounded-2xl bg-purple-400 text-white font-bold"
-          >
-            Siguiente ➡
-          </button>
-        </div>
-
-      </main>
-    </div>
-  );
+<style>
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:sans-serif;
 }
+
+body{
+background:linear-gradient(to bottom,#ffd6f7,#ead7ff,#d6f0ff);
+min-height:100vh;
+overflow-x:hidden;
+color:#333;
+}
+
+header{
+position:sticky;
+top:0;
+z-index:999;
+backdrop-filter:blur(15px);
+background:rgba(255,255,255,.5);
+padding:20px;
+border-bottom:2px solid rgba(255,255,255,.5);
+}
+
+h1{
+font-size:3rem;
+font-weight:900;
+background:linear-gradient(to right,#ff4fae,#9f5cff,#5caeff);
+-webkit-background-clip:text;
+-webkit-text-fill-color:transparent;
+margin-bottom:20px;
+}
+
+.chapterBar,
+.pageButtons,
+.imageSelector{
+display:flex;
+gap:10px;
+flex-wrap:wrap;
+margin-bottom:15px;
+}
+
+button,
+.uploadBtn{
+border:none;
+padding:12px 18px;
+border-radius:20px;
+cursor:pointer;
+font-weight:bold;
+transition:.3s;
+background:#ff7fc7;
+color:white;
+box-shadow:0 5px 15px rgba(0,0,0,.15);
+}
+
+button:hover,
+.uploadBtn:hover{
+transform:scale(1.05);
+}
+
+.viewer{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(350px,1fr));
+gap:20px;
+padding:30px;
+}
+
+.viewer img{
+width:100%;
+border-radius:30px;
+box-shadow:0 15px 30px rgba(0,0,0,.2);
+transition:.3s;
+}
+
+.navigation{
+display:flex;
+justify-content:center;
+gap:20px;
+padding:30px;
+}
+
+.admin{
+position:fixed;
+right:20px;
+top:20px;
+width:330px;
+max-height:90vh;
+overflow-y:auto;
+background:rgba(255,255,255,.75);
+backdrop-filter:blur(15px);
+padding:20px;
+border-radius:30px;
+z-index:9999;
+box-shadow:0 10px 30px rgba(0,0,0,.2);
+}
+
+.admin h2{
+margin-bottom:15px;
+color:#b04cff;
+}
+
+.admin h3{
+margin-top:15px;
+margin-bottom:8px;
+color:#ff5db2;
+}
+
+input,
+textarea,
+select{
+width:100%;
+padding:12px;
+border-radius:15px;
+border:1px solid #ffc7eb;
+margin-bottom:10px;
+outline:none;
+}
+
+textarea{
+min-height:100px;
+resize:vertical;
+}
+
+.noteBox{
+background:white;
+padding:20px;
+border-radius:25px;
+margin:20px;
+box-shadow:0 10px 20px rgba(0,0,0,.1);
+}
+
+.downloadBtn{
+display:inline-block;
+padding:12px 20px;
+background:#6daeff;
+color:white;
+border-radius:20px;
+text-decoration:none;
+font-weight:bold;
+margin-top:10px;
+}
+
+.selected{
+background:#ff4f8f !important;
+}
+
+</style>
+</head>
+<body>
+
+<header>
+
+<h1>Amor en la uno 💖</h1>
+
+<div class="chapterBar" id="chapterBar"></div>
+
+<div id="pageInfo"></div>
+
+<div class="pageButtons" id="pageButtons"></div>
+
+</header>
+
+<div class="admin">
+
+<h2>Panel Admin 🌸</h2>
+
+<input type="text" id="user" placeholder="Usuario">
+<input type="password" id="pass" placeholder="Contraseña">
+
+<button onclick="login()">Iniciar sesión 💖</button>
+
+<div id="panel" style="display:none;">
+
+<h3>📚 Elegir capítulo y página</h3>
+
+<select id="uploadChapter"></select>
+
+<input type="number" id="uploadPage" value="1" min="1">
+
+<label class="uploadBtn">
+🌸 Subir imágenes
+<input hidden type="file" multiple accept="image/*" onchange="uploadImages(event)">
+</label>
+
+<h3>🖼 Seleccione imagen</h3>
+
+<div class="imageSelector" id="imageSelector"></div>
+
+<h3>📦 Mover a</h3>
+
+<select id="moveChapter"></select>
+
+<input type="number" id="movePage" value="1" min="1">
+
+<button onclick="moveImage()">📦 Mover imagen</button>
+
+<label class="uploadBtn" style="background:#6db2ff;">
+🔄 Reemplazar imagen
+<input hidden type="file" accept="image/*" onchange="replaceImage(event)">
+</label>
+
+<button onclick="deleteImage()" style="background:#ff6363;">
+❌ Borrar imagen
+</button>
+
+<h3>📄 Documento</h3>
+
+<label class="uploadBtn" style="background:#b96dff;">
+Subir documento
+<input hidden type="file" onchange="uploadDocument(event)">
+</label>
+
+<button onclick="deleteDocument()" style="background:#ff6363;">
+🗑 Eliminar documento
+</button>
+
+<div id="documentContainer"></div>
+
+<h3>📝 Título</h3>
+
+<input type="text" id="titleInput" oninput="updateTexts()">
+
+<h3>💖 Nota</h3>
+
+<textarea id="noteInput" oninput="updateTexts()"></textarea>
+
+<h3>🎀 Dedicatoria</h3>
+
+<textarea id="dedicationInput" oninput="updateTexts()"></textarea>
+
+<h3>✨ Brillo</h3>
+
+<input type="range" min="50" max="200" value="100" id="brightness" oninput="renderPages()">
+
+<h3>🖼 Tamaño</h3>
+
+<input type="range" min="50" max="150" value="100" id="size" oninput="renderPages()">
+
+</div>
+
+</div>
+
+<div class="noteBox">
+<h2 id="titleView"></h2>
+<p id="noteView"></p>
+<p id="dedicationView"></p>
+
+<div id="downloadContainer"></div>
+</div>
+
+<div class="viewer" id="viewer"></div>
+
+<div class="navigation">
+<button onclick="previousPage()">⬅ Atrás</button>
+<button onclick="nextPage()">Siguiente ➡</button>
+</div>
+
+<script>
+
+const ADMIN_USER="adminuwu";
+const ADMIN_PASS="admin123uwu";
+
+let currentChapter=1;
+let selectedImage=null;
+
+const chapters=[1,2,3,4,5,6];
+
+let manga=JSON.parse(localStorage.getItem("manga")||"{}");
+
+let documentFile=JSON.parse(localStorage.getItem("documentFile")||"null");
+
+function save(){
+localStorage.setItem("manga",JSON.stringify(manga));
+}
+
+function login(){
+
+const user=document.getElementById("user").value;
+const pass=document.getElementById("pass").value;
+
+if(user===ADMIN_USER && pass===ADMIN_PASS){
+
+document.getElementById("panel").style.display="block";
+
+}else{
+
+alert("❌ Datos incorrectos");
+
+}
+
+}
+
+function createChapters(){
+
+const chapterBar=document.getElementById("chapterBar");
+
+chapters.forEach(ch=>{
+
+const btn=document.createElement("button");
+
+btn.innerText=ch;
+
+btn.onclick=()=>{
+
+currentChapter=ch;
+renderPages();
+
+};
+
+chapterBar.appendChild(btn);
+
+const option=document.createElement("option");
+
+option.value=ch;
+option.innerText=`Capítulo ${ch}`;
+
+document.getElementById("uploadChapter").appendChild(option.cloneNode(true));
+
+document.getElementById("moveChapter").appendChild(option);
+
+});
+
+}
+
+function uploadImages(event){
+
+const files=[...event.target.files];
+
+const chapter=Number(document.getElementById("uploadChapter").value);
+
+const page=Number(document.getElementById("uploadPage").value)-1;
+
+if(!manga[chapter]){
+manga[chapter]=[];
+}
+
+files.forEach((file,index)=>{
+
+const reader=new FileReader();
+
+reader.onload=e=>{
+
+manga[chapter].splice(page+index,0,e.target.result);
+
+save();
+
+renderPages();
+
+};
+
+reader.readAsDataURL(file);
+
+});
+
+}
+
+function renderPages(){
+
+const viewer=document.getElementById("viewer");
+
+viewer.innerHTML="";
+
+const pages=manga[currentChapter]||[];
+
+document.getElementById("pageInfo").innerText=`${pages.length} páginas`;
+
+const brightness=document.getElementById("brightness").value;
+
+const size=document.getElementById("size").value;
+
+pages.forEach((img,index)=>{
+
+const image=document.createElement("img");
+
+image.src=img;
+
+image.style.filter=`brightness(${brightness}%)`;
+
+image.style.width=`${size}%`;
+
+viewer.appendChild(image);
+
+});
+
+renderPageButtons();
+
+renderImageSelector();
+
+renderDocument();
+
+}
+
+function renderPageButtons(){
+
+const container=document.getElementById("pageButtons");
+
+container.innerHTML="";
+
+const pages=manga[currentChapter]||[];
+
+pages.forEach((_,index)=>{
+
+const btn=document.createElement("button");
+
+btn.innerText=index+1;
+
+container.appendChild(btn);
+
+});
+
+}
+
+function renderImageSelector(){
+
+const selector=document.getElementById("imageSelector");
+
+selector.innerHTML="";
+
+const pages=manga[currentChapter]||[];
+
+pages.forEach((_,index)=>{
+
+const btn=document.createElement("button");
+
+btn.innerText=index+1;
+
+if(selectedImage===index){
+btn.classList.add("selected");
+}
+
+btn.onclick=()=>{
+
+selectedImage=index;
+
+renderImageSelector();
+
+};
+
+selector.appendChild(btn);
+
+});
+
+}
+
+function deleteImage(){
+
+if(selectedImage===null)return;
+
+manga[currentChapter].splice(selectedImage,1);
+
+save();
+
+renderPages();
+
+}
+
+function moveImage(){
+
+if(selectedImage===null)return;
+
+const targetChapter=Number(document.getElementById("moveChapter").value);
+
+const targetPage=Number(document.getElementById("movePage").value)-1;
+
+const image=manga[currentChapter][selectedImage];
+
+manga[currentChapter].splice(selectedImage,1);
+
+if(!manga[targetChapter]){
+manga[targetChapter]=[];
+}
+
+manga[targetChapter].splice(targetPage,0,image);
+
+save();
+
+renderPages();
+
+}
+
+function replaceImage(event){
+
+if(selectedImage===null)return;
+
+const file=event.target.files[0];
+
+const reader=new FileReader();
+
+reader.onload=e=>{
+
+manga[currentChapter][selectedImage]=e.target.result;
+
+save();
+
+renderPages();
+
+};
+
+reader.readAsDataURL(file);
+
+}
+
+function uploadDocument(event){
+
+const file=event.target.files[0];
+
+const reader=new FileReader();
+
+reader.onload=e=>{
+
+documentFile={
+
+name:file.name,
+url:e.target.result
+
+};
+
+localStorage.setItem("documentFile",JSON.stringify(documentFile));
+
+renderDocument();
+
+};
+
+reader.readAsDataURL(file);
+
+}
+
+function renderDocument(){
+
+const container=document.getElementById("downloadContainer");
+
+if(!documentFile){
+
+container.innerHTML="";
+
+return;
+
+}
+
+container.innerHTML=`
+<a class="downloadBtn" href="${documentFile.url}" download="${documentFile.name}">
+⬇ Descargar ${documentFile.name}
+</a>
+`;
+
+}
+
+function deleteDocument(){
+
+documentFile=null;
+
+localStorage.removeItem("documentFile");
+
+renderDocument();
+
+}
+
+function updateTexts(){
+
+document.getElementById("titleView").innerText=document.getElementById("titleInput").value;
+
+document.getElementById("noteView").innerText=document.getElementById("noteInput").value;
+
+document.getElementById("dedicationView").innerText=document.getElementById("dedicationInput").value;
+
+}
+
+function nextPage(){
+
+window.scrollBy({
+top:window.innerHeight,
+behavior:"smooth"
+});
+
+}
+
+function previousPage(){
+
+window.scrollBy({
+top:-window.innerHeight,
+behavior:"smooth"
+});
+
+}
+
+createChapters();
+
+renderPages();
+
+</script>
+
+</body>
+</html>
