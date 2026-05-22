@@ -1,0 +1,1125 @@
+
+<!-- index.html -->
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+<title>Amor en la 1 💖</title>
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Arial, Helvetica, sans-serif;
+}
+
+body{
+background:linear-gradient(to bottom,#ffd6f7,#f6dcff,#d6efff);
+min-height:100vh;
+overflow-x:hidden;
+color:#333;
+}
+
+/* FONDO KAWAII */
+
+.magic-bg{
+position:fixed;
+inset:0;
+overflow:hidden;
+pointer-events:none;
+z-index:0;
+}
+
+.magic-item{
+position:absolute;
+bottom:-100px;
+animation:floatSparkle linear infinite;
+opacity:.8;
+}
+
+@keyframes floatSparkle{
+0%{
+transform:translateY(0px) scale(1);
+opacity:0;
+}
+50%{
+opacity:.9;
+}
+100%{
+transform:translateY(-120vh) scale(1.5);
+opacity:0;
+}
+}
+
+/* HEADER */
+
+header{
+position:sticky;
+top:0;
+z-index:50;
+backdrop-filter:blur(18px);
+background:rgba(255,255,255,.6);
+padding:18px;
+border-bottom:2px solid rgba(255,255,255,.5);
+box-shadow:0 5px 20px rgba(0,0,0,.08);
+}
+
+.title{
+font-size:3rem;
+font-weight:900;
+text-align:center;
+margin-bottom:15px;
+
+background:linear-gradient(
+90deg,
+#8fd8ff 0%,
+#7dbdff 45%,
+#ff9ed6 55%,
+#ffc2e7 100%
+);
+
+background-size:300% auto;
+
+-webkit-background-clip:text;
+-webkit-text-fill-color:transparent;
+
+animation:titleFlow 8s linear infinite;
+
+filter:drop-shadow(0 0 12px rgba(255,170,220,.5));
+}
+
+@keyframes titleFlow{
+0%{
+background-position:0% center;
+}
+100%{
+background-position:300% center;
+}
+}
+
+/* CAPITULOS */
+
+.chapterTitle{
+font-size:.9rem;
+font-weight:bold;
+margin-bottom:8px;
+color:#ff69b4;
+}
+
+.chapterBar,
+.pageBar{
+display:flex;
+gap:10px;
+flex-wrap:wrap;
+margin-bottom:10px;
+}
+
+.chapterBtn,
+.pageBtn{
+border:none;
+width:42px;
+height:42px;
+border-radius:50%;
+cursor:pointer;
+font-weight:bold;
+transition:.25s;
+color:white;
+box-shadow:0 5px 15px rgba(0,0,0,.15);
+}
+
+.chapterBtn{
+background:#ff9ed6;
+}
+
+.pageBtn{
+background:#8fd8ff;
+}
+
+.chapterBtn:hover,
+.pageBtn:hover{
+transform:scale(1.1);
+}
+
+.active{
+outline:3px solid white;
+transform:scale(1.1);
+}
+
+/* ADMIN */
+
+.adminToggle{
+position:fixed;
+top:20px;
+right:20px;
+z-index:9999;
+
+background:linear-gradient(135deg,#ff9ed6,#ffc4e8);
+
+border:none;
+padding:12px 18px;
+border-radius:20px;
+
+font-weight:bold;
+color:white;
+cursor:pointer;
+
+box-shadow:0 8px 20px rgba(255,105,180,.3);
+}
+
+.adminPanel{
+position:fixed;
+top:80px;
+right:20px;
+
+width:320px;
+max-height:80vh;
+overflow-y:auto;
+
+padding:20px;
+border-radius:30px;
+
+background:rgba(255,255,255,.78);
+backdrop-filter:blur(15px);
+
+z-index:9999;
+
+box-shadow:0 15px 35px rgba(0,0,0,.15);
+
+display:none;
+}
+
+.adminPanel.show{
+display:block;
+}
+
+.adminPanel h2{
+margin-bottom:15px;
+color:#ff69b4;
+}
+
+input,
+textarea,
+select{
+width:100%;
+padding:12px;
+border:none;
+border-radius:16px;
+margin-bottom:12px;
+background:#fff;
+}
+
+textarea{
+resize:vertical;
+min-height:90px;
+}
+
+.adminPanel button,
+.uploadBtn{
+width:100%;
+border:none;
+padding:12px;
+border-radius:16px;
+margin-bottom:10px;
+cursor:pointer;
+font-weight:bold;
+color:white;
+}
+
+.pink{
+background:#ff8fc8;
+}
+
+.blue{
+background:#7ec8ff;
+}
+
+.red{
+background:#ff6f7d;
+}
+
+.purple{
+background:#b38cff;
+}
+
+.uploadBtn{
+display:block;
+text-align:center;
+}
+
+/* VIEWER */
+
+.viewer{
+position:relative;
+z-index:2;
+
+padding:30px;
+
+display:flex;
+flex-direction:column;
+align-items:center;
+gap:25px;
+}
+
+.viewer.double{
+display:grid;
+grid-template-columns:1fr 1fr;
+align-items:start;
+max-width:1400px;
+margin:auto;
+}
+
+.viewer img{
+width:100%;
+max-width:850px;
+
+border-radius:30px;
+
+box-shadow:0 15px 35px rgba(0,0,0,.15);
+
+transition:.3s;
+}
+
+/* INFO */
+
+.infoBox{
+max-width:900px;
+width:100%;
+
+background:rgba(255,255,255,.75);
+
+padding:25px;
+border-radius:30px;
+
+backdrop-filter:blur(10px);
+
+box-shadow:0 10px 30px rgba(0,0,0,.1);
+}
+
+.infoBox h2{
+margin-bottom:10px;
+color:#ff69b4;
+}
+
+.infoBox p{
+margin-bottom:12px;
+line-height:1.6;
+}
+
+.downloadBtn{
+display:inline-block;
+padding:12px 18px;
+border-radius:18px;
+background:#ff8fc8;
+color:white;
+text-decoration:none;
+font-weight:bold;
+}
+
+/* NAV */
+
+.bottomNavigation{
+display:flex;
+justify-content:center;
+gap:20px;
+padding:40px;
+}
+
+.navBtn{
+border:none;
+padding:15px 28px;
+border-radius:999px;
+
+font-weight:900;
+font-size:1rem;
+
+cursor:pointer;
+color:white;
+
+transition:.25s;
+}
+
+.navBtn:hover{
+transform:scale(1.05);
+}
+
+.prevBtn{
+background:linear-gradient(135deg,#8fd8ff,#7bbfff);
+box-shadow:0 8px 20px rgba(120,190,255,.4);
+}
+
+.nextBtn{
+background:linear-gradient(135deg,#ffb4de,#ff90cb);
+box-shadow:0 8px 20px rgba(255,140,200,.4);
+}
+
+.empty{
+padding:60px;
+text-align:center;
+font-size:1.1rem;
+color:#777;
+}
+
+/* MOBILE */
+
+@media(max-width:900px){
+
+.viewer.double{
+grid-template-columns:1fr;
+}
+
+.title{
+font-size:2.2rem;
+}
+
+.adminPanel{
+width:90%;
+right:5%;
+}
+
+}
+
+</style>
+</head>
+<body>
+
+<!-- FONDO -->
+
+<div class="magic-bg" id="magicBg"></div>
+
+<!-- HEADER -->
+
+<header>
+
+<h1 class="title">✨ Amor en la 1 ✨</h1>
+
+<div class="chapterTitle">Capítulos 💖</div>
+
+<div class="chapterBar" id="chapterBar"></div>
+
+<div class="chapterTitle">Páginas 📖</div>
+
+<div class="pageBar" id="pageBar"></div>
+
+</header>
+
+<!-- ADMIN -->
+
+<button class="adminToggle" onclick="toggleAdmin()">
+⚙ Admin
+</button>
+
+<div class="adminPanel" id="adminPanel">
+
+<div id="loginBox">
+
+<h2>💖 Admin Login</h2>
+
+<input type="text" id="user" placeholder="Usuario">
+
+<input type="password" id="pass" placeholder="Contraseña">
+
+<button class="pink" onclick="login()">
+Entrar como administrador
+</button>
+
+</div>
+
+<div id="adminContent" style="display:none;">
+
+<h2>🌸 Panel Admin</h2>
+
+<label class="uploadBtn blue">
+🖼 Subir imágenes
+<input hidden type="file" multiple accept="image/*" onchange="uploadImages(event)">
+</label>
+
+<select id="moveChapter"></select>
+
+<input type="number" id="movePage" min="1" value="1">
+
+<button class="purple" onclick="movePageTo()">
+📦 Mover página
+</button>
+
+<label class="uploadBtn blue">
+🔄 Reemplazar imagen
+<input hidden type="file" accept="image/*" onchange="replaceImage(event)">
+</label>
+
+<button class="red" onclick="deletePage()">
+❌ Borrar página
+</button>
+
+<label class="uploadBtn purple">
+📄 Subir documento
+<input hidden type="file" onchange="uploadDocument(event)">
+</label>
+
+<h3>💖 Título</h3>
+<input type="text" id="titleInput" oninput="saveTexts()">
+
+<h3>📝 Nota</h3>
+<textarea id="noteInput" oninput="saveTexts()"></textarea>
+
+<h3>🎀 Dedicatoria</h3>
+<textarea id="dedicationInput" oninput="saveTexts()"></textarea>
+
+<h3>✨ Brillo</h3>
+<input type="range" min="50" max="200" value="100" id="brightness" oninput="changeBrightness(this.value)">
+
+<h3>🖼 Tamaño</h3>
+<input type="range" min="50" max="150" value="100" id="size" oninput="changeSize(this.value)">
+
+<h3>👀 Vista</h3>
+
+<button class="blue" onclick="setViewMode(1)">
+1 Página
+</button>
+
+<button class="pink" onclick="setViewMode(2)">
+2 Páginas
+</button>
+
+<button class="pink" onclick="addChapter()">
+➕ Agregar capítulo
+</button>
+
+<button class="red" onclick="removeChapter()">
+➖ Borrar capítulo
+</button>
+
+</div>
+
+</div>
+
+<!-- VIEWER -->
+
+<div class="viewer" id="viewer"></div>
+
+<!-- INFO -->
+
+<div class="viewer">
+
+<div class="infoBox">
+
+<h2 id="titleView"></h2>
+
+<p id="noteView"></p>
+
+<p id="dedicationView"></p>
+
+<div id="documentContainer"></div>
+
+</div>
+
+</div>
+
+<!-- NAV -->
+
+<div class="bottomNavigation">
+
+<button class="navBtn prevBtn" onclick="prevPage()">
+⬅ Atrás
+</button>
+
+<button class="navBtn nextBtn" onclick="nextPage()">
+➡ Siguiente
+</button>
+
+</div>
+
+<script>
+
+/* LOGIN */
+
+const ADMIN_USER="adminuwu";
+const ADMIN_PASS="admin123uwu";
+
+function login(){
+
+const user=document.getElementById("user").value;
+const pass=document.getElementById("pass").value;
+
+if(user===ADMIN_USER && pass===ADMIN_PASS){
+
+document.getElementById("loginBox").style.display="none";
+document.getElementById("adminContent").style.display="block";
+
+}else{
+
+alert("❌ Datos incorrectos");
+
+}
+
+}
+
+function toggleAdmin(){
+
+document.getElementById("adminPanel")
+.classList.toggle("show");
+
+}
+
+/* STORAGE */
+
+function load(key, fallback){
+
+try{
+
+return JSON.parse(localStorage.getItem(key)) ?? fallback;
+
+}catch{
+
+return fallback;
+
+}
+
+}
+
+function save(key, value){
+
+try{
+
+localStorage.setItem(key, JSON.stringify(value));
+
+}catch{
+
+alert("⚠ El almacenamiento está lleno.");
+
+}
+
+}
+
+/* DATA */
+
+let manga=load("manga",{1:[]});
+
+let chapterMeta=load("chapterMeta",{});
+
+let documentFile=load("documentFile",null);
+
+let currentChapter=1;
+let currentPage=0;
+
+let selectedPage=0;
+
+let viewMode=1;
+
+let brightness=load("brightness",100);
+let size=load("size",100);
+
+/* CHAPTERS */
+
+function renderChapters(){
+
+const bar=document.getElementById("chapterBar");
+bar.innerHTML="";
+
+const move=document.getElementById("moveChapter");
+move.innerHTML="";
+
+Object.keys(manga).forEach(ch=>{
+
+const btn=document.createElement("button");
+
+btn.className="chapterBtn";
+
+if(Number(ch)===currentChapter){
+btn.classList.add("active");
+}
+
+btn.innerText=ch;
+
+btn.onclick=()=>{
+
+currentChapter=Number(ch);
+currentPage=0;
+
+render();
+
+};
+
+bar.appendChild(btn);
+
+const option=document.createElement("option");
+
+option.value=ch;
+option.innerText=`Capítulo ${ch}`;
+
+move.appendChild(option);
+
+});
+
+}
+
+/* PAGES */
+
+function renderPagesBar(){
+
+const bar=document.getElementById("pageBar");
+
+bar.innerHTML="";
+
+const pages=manga[currentChapter] || [];
+
+pages.forEach((_,i)=>{
+
+const btn=document.createElement("button");
+
+btn.className="pageBtn";
+
+if(i===currentPage){
+btn.classList.add("active");
+}
+
+btn.innerText=i+1;
+
+btn.onclick=()=>{
+
+currentPage=i;
+
+render();
+
+};
+
+bar.appendChild(btn);
+
+});
+
+}
+
+/* VIEWER */
+
+function render(){
+
+renderChapters();
+renderPagesBar();
+
+const viewer=document.getElementById("viewer");
+
+viewer.className=viewMode===2
+? "viewer double"
+: "viewer";
+
+viewer.innerHTML="";
+
+const pages=manga[currentChapter] || [];
+
+if(pages.length===0){
+
+viewer.innerHTML=`
+<div class="empty">
+No hay páginas en este capítulo 💔
+</div>
+`;
+
+return;
+
+}
+
+let visible=[];
+
+if(viewMode===1){
+
+visible=[pages[currentPage]];
+
+}else{
+
+visible=[
+pages[currentPage],
+pages[currentPage+1]
+].filter(Boolean);
+
+}
+
+visible.forEach(src=>{
+
+const img=document.createElement("img");
+
+img.src=src;
+
+img.style.filter=`brightness(${brightness}%)`;
+
+img.style.maxWidth=`${size}%`;
+
+viewer.appendChild(img);
+
+});
+
+/* INFO */
+
+const meta=chapterMeta[currentChapter] || {};
+
+document.getElementById("titleView").innerText=
+meta.title || "";
+
+document.getElementById("noteView").innerText=
+meta.note || "";
+
+document.getElementById("dedicationView").innerText=
+meta.dedication || "";
+
+/* PANEL */
+
+document.getElementById("titleInput").value=
+meta.title || "";
+
+document.getElementById("noteInput").value=
+meta.note || "";
+
+document.getElementById("dedicationInput").value=
+meta.dedication || "";
+
+renderDocument();
+
+}
+
+/* NAVIGATION */
+
+function nextPage(){
+
+const pages=manga[currentChapter] || [];
+
+if(viewMode===2){
+
+if(currentPage+2 < pages.length){
+currentPage+=2;
+}
+
+}else{
+
+if(currentPage+1 < pages.length){
+currentPage++;
+}
+
+}
+
+render();
+
+window.scrollTo({
+top:0,
+behavior:"smooth"
+});
+
+}
+
+function prevPage(){
+
+if(viewMode===2){
+
+if(currentPage-2 >=0){
+currentPage-=2;
+}
+
+}else{
+
+if(currentPage-1 >=0){
+currentPage--;
+}
+
+}
+
+render();
+
+window.scrollTo({
+top:0,
+behavior:"smooth"
+});
+
+}
+
+/* VIEW MODE */
+
+function setViewMode(mode){
+
+viewMode=mode;
+
+render();
+
+}
+
+/* IMAGES */
+
+function uploadImages(event){
+
+const files=[...event.target.files];
+
+if(!manga[currentChapter]){
+manga[currentChapter]=[];
+}
+
+let loaded=0;
+
+files.forEach(file=>{
+
+const reader=new FileReader();
+
+reader.onload=e=>{
+
+manga[currentChapter].push(e.target.result);
+
+loaded++;
+
+if(loaded===files.length){
+
+save("manga",manga);
+
+render();
+
+}
+
+};
+
+reader.readAsDataURL(file);
+
+});
+
+}
+
+function deletePage(){
+
+const pages=manga[currentChapter];
+
+if(!pages[currentPage]) return;
+
+pages.splice(currentPage,1);
+
+if(currentPage>=pages.length){
+currentPage=Math.max(0,pages.length-1);
+}
+
+save("manga",manga);
+
+render();
+
+}
+
+function replaceImage(event){
+
+const file=event.target.files[0];
+
+if(!file) return;
+
+const reader=new FileReader();
+
+reader.onload=e=>{
+
+manga[currentChapter][currentPage]=e.target.result;
+
+save("manga",manga);
+
+render();
+
+};
+
+reader.readAsDataURL(file);
+
+}
+
+function movePageTo(){
+
+const targetChapter=
+Number(document.getElementById("moveChapter").value);
+
+const targetPage=
+Number(document.getElementById("movePage").value)-1;
+
+if(targetChapter===currentChapter
+&& targetPage===currentPage){
+return;
+}
+
+const image=
+manga[currentChapter][currentPage];
+
+manga[currentChapter].splice(currentPage,1);
+
+if(!manga[targetChapter]){
+manga[targetChapter]=[];
+}
+
+manga[targetChapter].splice(targetPage,0,image);
+
+save("manga",manga);
+
+render();
+
+}
+
+/* TEXTS */
+
+function saveTexts(){
+
+if(!chapterMeta[currentChapter]){
+chapterMeta[currentChapter]={};
+}
+
+chapterMeta[currentChapter].title=
+document.getElementById("titleInput").value;
+
+chapterMeta[currentChapter].note=
+document.getElementById("noteInput").value;
+
+chapterMeta[currentChapter].dedication=
+document.getElementById("dedicationInput").value;
+
+save("chapterMeta",chapterMeta);
+
+render();
+
+}
+
+/* DOCUMENT */
+
+function uploadDocument(event){
+
+const file=event.target.files[0];
+
+if(!file) return;
+
+const reader=new FileReader();
+
+reader.onload=e=>{
+
+documentFile={
+name:file.name,
+url:e.target.result
+};
+
+save("documentFile",documentFile);
+
+renderDocument();
+
+};
+
+reader.readAsDataURL(file);
+
+}
+
+function renderDocument(){
+
+const container=
+document.getElementById("documentContainer");
+
+if(!documentFile){
+
+container.innerHTML="";
+return;
+
+}
+
+container.innerHTML=`
+<a
+class="downloadBtn"
+href="${documentFile.url}"
+download="${documentFile.name}"
+>
+📄 Descargar ${documentFile.name}
+</a>
+`;
+
+}
+
+/* SETTINGS */
+
+function changeBrightness(value){
+
+brightness=value;
+
+save("brightness",brightness);
+
+render();
+
+}
+
+function changeSize(value){
+
+size=value;
+
+save("size",size);
+
+render();
+
+}
+
+/* CHAPTERS */
+
+function addChapter(){
+
+const nums=Object.keys(manga)
+.map(Number);
+
+const next=Math.max(...nums)+1;
+
+manga[next]=[];
+
+save("manga",manga);
+
+render();
+
+}
+
+function removeChapter(){
+
+if(Object.keys(manga).length<=1){
+return;
+}
+
+delete manga[currentChapter];
+
+currentChapter=
+Number(Object.keys(manga)[0]);
+
+currentPage=0;
+
+save("manga",manga);
+
+render();
+
+}
+
+/* MAGIC BACKGROUND */
+
+function createMagic(){
+
+const icons=["✨","🌸","🫧","💖","⭐"];
+
+const el=document.createElement("div");
+
+el.className="magic-item";
+
+el.innerText=
+icons[Math.floor(Math.random()*icons.length)];
+
+el.style.left=Math.random()*100+"vw";
+
+el.style.fontSize=
+(18+Math.random()*24)+"px";
+
+el.style.animationDuration=
+(8+Math.random()*10)+"s";
+
+document.getElementById("magicBg")
+.appendChild(el);
+
+setTimeout(()=>{
+el.remove();
+},20000);
+
+}
+
+setInterval(createMagic,400);
+
+/* START */
+
+render();
+
+</script>
+
+</body>
+</html>
+```
